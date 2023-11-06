@@ -25,30 +25,30 @@ The general architecture is shown below:
   - The throughput can be even further increased by providing a cache such as Redis and also having multiple Databases.
     
 ## Implementation:
-- The overall backend was developed using Java Servlet to handle the incoming requests. The URI for the backend should look something like `http://<hostname>/<path>`
-- The servlet can handle the has the following endpoints/paths to fulfill all the requirements of the assessment:
+- The overall backend was developed using Java Servlet to handle the incoming requests. The URL for the backend should look something like `http://<hostname>/<path>`
+- The servlet can handle the following endpoints/paths to fulfill all the requirements of the assessment:
     - <b>`/*`</b>:
         - The user can enter the tiny URL path here.
-        - Servlet will redirect the user to the long URI website.
-        - If a tiny URL doesn't exist in the database, status code 404 is sent back to the user with a response message stating, "URI does not exist".
+        - Servlet will redirect the user to the long URL website.
+        - If a tiny URL doesn't exist in the database, status code 404 is sent back to the user with a response message stating, "URL does not exist".
     - <b>`/history?username=<username>`</b>:
         - This endpoint sends a list of long URLs and the corresponding tiny URLs created by a user back to the client.
         - The username is sent to the backend as a parameter.
     - <b>`/maketiny`</b>:
-        - This endpoint is used to create a tiny URL instead of the long URL.
+        - This endpoint is used to create a tiny URL for the provided long URL.
         - This sends the following information in the body section of the request so it can be saved into the Database:
-            - url: the long URI which needs to be converted into a tiny URI
-            - username: the user who wants to create the URI. In the following section, it will be explained why the username is used.
-            - custom: a bool that will let the server know if the client wants a randomly generated tiny URI or not.
-            - customtiny: This is an optional key that is needed if the client wants to create a custom tiny URI.
-        - The Servlet will take all the data from the request and create a tiny URI.
+            - url: the long URL which needs to be converted into a tiny URL
+            - username: the user who wants to create the URL. In the following section, it will be explained why the username is used.
+            - custom: a bool that will let the server know if the client wants a randomly generated tiny URL or not.
+            - customtiny: This is an optional key that is needed if the client wants to create a custom tiny URL.
+        - The Servlet will take all the data from the request and create a tiny URL.
         - If custom is set to true, the servlet will check if the custom URL that the client wants exists in the database or not.
             - If it does exist, a response is sent back to the user stating that the custom URL is not available.
-            - If it does not exist, the custom URI, long URI, and Username are saved in the database.
+            - If it does not exist, the custom URL, long URL, and Username are saved in the database.
             - The number of requests is deducted from the user.
   - <b>`/user`</b>:
       - This endpoint is used to create users.
-      - The user data is sent as a request body to this endpoint. The body should hold the following details:
+      - The user data is sent as a request body to this endpoint. The request body should hold the following details:
           - username: This is the username of the client.
           - password: This is the password of the client that could be used to login.
           - Tier: The Tier of the user that determines the number of requests the user can use to create a tiny URL.
@@ -62,5 +62,5 @@ The general architecture is shown below:
       - users: Collection of user credentials.
       - paths: Collection of tiny URLs created by a user and the long URL and also the user who created it which can be used to retrieve the history. 
   - First, the user has to create an account to set the number of requests the user can use to create a tiny URL and store it in the paths collection. After creating a tiny url the number of requests are deducted from the user and is updated into the user collections.
-  - The user can create a tiny URL by giving a custom URL or not and if he gives a custom URL it is checked if the custom URL already exists or not in the database.
+  - The user can create a tiny URL by giving a custom URL or not and if they give a custom URL it is checked if the custom URL already exists or not in the database.
   - The user can view the history of tiny URLs created by a user using the `/history` path. The server will get the param from the requests and retrieve only the documents with that username.
